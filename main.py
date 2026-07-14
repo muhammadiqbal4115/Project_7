@@ -35,12 +35,28 @@ STATIC_DIR = "static"
 # ---------- Load models (cached, once per session) ----------
 @st.cache_resource
 def load_models():
+    print("=" * 60)
+
+    print("STEP 1: Starting PatchCore")
+    t = time.time()
+
     patchcore = PatchCoreModel(
         memory_bank_path="models/memory_bank.pt",
         backbone_name="wide_resnet50_2",
-        device="cpu",  # Streamlit Cloud has no GPU
+        device="cpu",
     )
+
+    print(f"STEP 2: PatchCore loaded in {time.time()-t:.2f}s")
+
+    print("STEP 3: Starting YOLO")
+    t = time.time()
+
     yolo = YOLOModel(weights_path="models/yolo_best.pt")
+
+    print(f"STEP 4: YOLO loaded in {time.time()-t:.2f}s")
+
+    print("STEP 5: Finished")
+
     return patchcore, yolo
 
 
